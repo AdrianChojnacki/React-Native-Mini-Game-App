@@ -1,8 +1,17 @@
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import StartGameScreen from "./screens/StartGameScreen";
 
 export default function App() {
-  return <StartGameScreen />;
+  return (
+    <View style={styles.rootScreen}>
+      <StartGameScreen />
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rootScreen: {
+    flex: 1,
+    backgroundColor: "#ddb52f",
+  },
+});
