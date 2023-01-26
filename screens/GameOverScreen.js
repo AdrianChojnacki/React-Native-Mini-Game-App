@@ -1,33 +1,64 @@
-import { View, Image, StyleSheet, Text, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import Title from "../components/ui/Title";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Colors from "../constants/colors";
 
 function GameOverScreen({ userNumber, roundsNumber, onStartNewGame }) {
+  const { width, height } = useWindowDimensions();
+
+  let imageSize = 300;
+  let fontSize = 24;
+
+  if (width < 380) {
+    imageSize = 150;
+    fontSize = 18;
+  }
+
+  if (height < 400) {
+    imageSize = 80;
+    fontSize = 14;
+  }
+
+  const imageStyle = {
+    width: imageSize,
+    height: imageSize,
+    borderRadius: imageSize / 2,
+  };
+
   return (
-    <View style={styles.rootContainer}>
-      <Title>GAME OVER!</Title>
-      <View style={styles.imageContainer}>
-        <Image
-          source={require("../assets/images/success.png")}
-          style={styles.image}
-        />
+    <ScrollView style={styles.screen}>
+      <View style={styles.rootContainer}>
+        <Title>GAME OVER!</Title>
+        <View style={[styles.imageContainer, imageStyle]}>
+          <Image
+            source={require("../assets/images/success.png")}
+            style={styles.image}
+          />
+        </View>
+        <Text style={[styles.summaryText, { fontSize }]}>
+          Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text>{" "}
+          rounds to guess the number{" "}
+          <Text style={styles.highlight}>{userNumber}</Text>.
+        </Text>
+        <PrimaryButton onPress={onStartNewGame}>Start New Game</PrimaryButton>
       </View>
-      <Text style={styles.summaryText}>
-        Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text>{" "}
-        rounds to guess the number{" "}
-        <Text style={styles.highlight}>{userNumber}</Text>.
-      </Text>
-      <PrimaryButton onPress={onStartNewGame}>Start New Game</PrimaryButton>
-    </View>
+    </ScrollView>
   );
 }
 
 export default GameOverScreen;
 
-const deviceWidth = Dimensions.get("window").width;
-
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   rootContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -35,12 +66,9 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   imageContainer: {
-    width: deviceWidth < 380 ? 150 : 300,
-    height: deviceWidth < 380 ? 150 : 300,
     margin: 36,
     borderWidth: 3,
     borderColor: Colors.primary700,
-    borderRadius: deviceWidth < 380 ? 75 : 150,
     overflow: "hidden",
   },
   image: {
@@ -50,7 +78,6 @@ const styles = StyleSheet.create({
   summaryText: {
     marginBottom: 24,
     fontFamily: "open-sans",
-    fontSize: deviceWidth < 380 ? 18 : 24,
     textAlign: "center",
   },
   highlight: {
